@@ -8,4 +8,5 @@ resource "aws_db_instance" "myrds" {
     username             = "admin"
     password             = "newpass1"
     parameter_group_name = "default.mysql5.7"  
+    skip_final_snapshot  = true
 }
