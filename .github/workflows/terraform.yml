@@ -39,7 +39,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config=backend-envs/tbgdev.tfvars
+        run: terraform init #-backend-config=backend-envs/tbgdev.tfvars
         env:
           GOOGLE_CREDENTIALS: "${{ secrets.GOOGLE_CREDENTIALS }}"
       #- name: Terraform Format
