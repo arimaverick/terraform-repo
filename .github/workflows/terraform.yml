@@ -40,6 +40,8 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init -backend-config=backend-envs/tbgdev.tfvars
+        env:
+          GOOGLE_CREDENTIALS: "${{ secrets.GOOGLE_CREDENTIALS }}"
       #- name: Terraform Format
       #  id: fmt
       #  run: terraform fmt -check
@@ -48,6 +50,8 @@ jobs:
         #if: github.event_name == 'pull_request'
         run: terraform plan -var-file=envs/tbgdev.tfvars -no-color
         continue-on-error: true
+        env:
+          GOOGLE_CREDENTIALS: "${{ secrets.GOOGLE_CREDENTIALS }}"
 
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
@@ -56,3 +60,5 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -var-file="env/tbgdev.tfvars" -auto-approve
+        env:
+          GOOGLE_CREDENTIALS: "${{ secrets.GOOGLE_CREDENTIALS }}"
