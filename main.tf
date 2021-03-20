@@ -10,12 +10,12 @@ module "vpc" {
     {
       subnet_name   = var.subnet1_name
       subnet_ip     = "10.10.10.0/24"
-      subnet_region = "eu-west1"
+      subnet_region = "europe-west2"
     },
     {
       subnet_name           = var.subnet2_name
       subnet_ip             = "10.10.20.0/24"
-      subnet_region         = "eu-west2"
+      subnet_region         = "europe-west1"
       subnet_private_access = "true"
       subnet_flow_logs      = "true"
       description           = "This subnet has a description"
