@@ -9,5 +9,5 @@ terraform {
 
 provider "google" {
   # Configuration options
-  project = "ari-project-1982"
+  project = var.project_id
 }

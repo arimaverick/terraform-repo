@@ -6,6 +6,9 @@ on:
       - main
   pull_request:
 
+env:
+  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
+
 jobs:
   terraform:
     name: "Terraform"
@@ -31,7 +34,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init
+        run: terraform init -backend-config=backend-envs/tbgdev.tfvars -backend-config=credentials=${GOOGLE_APPLICATION_CREDENTIALS}
 
       #- name: Terraform Format
       #  id: fmt
@@ -39,7 +42,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         #if: github.event_name == 'pull_request'
-        run: terraform plan -var-file="env/tbgdev.tfvars" -no-color
+        run: terraform plan -var-file=envs/tbgdev.tfvars -no-color
         continue-on-error: true
 
       - name: Terraform Plan Status
