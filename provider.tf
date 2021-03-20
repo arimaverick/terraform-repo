@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     google = {
-      source = "hashicorp/google"
+      source  = "hashicorp/google"
       version = "3.60.0"
     }
   }
@@ -9,5 +9,5 @@ terraform {
 
 provider "google" {
   # Configuration options
-  project     = "ari-project-1982"
+  project = "ari-project-1982"
 }
