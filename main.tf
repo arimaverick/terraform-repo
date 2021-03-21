@@ -52,7 +52,7 @@ module "vm_instance_template" {
   service_account = module.service_accounts.email
   disk_size_gb = 20
   source_image = "debian-cloud/debian-9"
-  startup_script = "${file("../files/install-hosted-runner.sh")}"
+  startup_script = file("./files/install-hosted-runner.sh")
   network        = module.vpc.network_name
   # insert the 3 required variables here
 }
