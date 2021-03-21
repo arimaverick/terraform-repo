@@ -31,7 +31,7 @@ jobs:
           GITHUB_PAT: ${{ secrets.USER_PAT }}
       
       - name: Set Token for Registration
-        run: sed -i 's/RUNNER_REG_TOKEN/${RUNNER_REG_TOKEN}/' files/install_hosted_runner.tpl
+        run: sed -i 's/RUNNER_REG_TOKEN/${RUNNER_REG_TOKEN}/' ./files/install_hosted_runner.tpl
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
