@@ -35,3 +35,12 @@ module "vpc" {
   routes = [
   ]
 }
+
+module "vm_compute_instance" {
+  source  = "terraform-google-modules/vm/google//modules/compute_instance"
+  version = "6.2.0"
+  region = "europe-west2"
+  network = module.vpc.network_name
+
+  # insert the 2 required variables here
+}
