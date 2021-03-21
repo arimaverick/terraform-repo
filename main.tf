@@ -36,6 +36,71 @@ module "vpc" {
   ]
 }
 
+data "google_compute_image" "ubuntu_image" {
+  name  = var.instance_config.image_name
+  project = var.instance_config.image_project
+}
+
+resource "google_service_account" "vm_instance_sa" {
+  account_id   = "terraform-sa"
+  display_name = "Service Account"
+}
+
+resource "google_service_account_iam_member" "compute_admin" {
+  count       = length(var.ssh_members)
+  member = var.ssh_members[count.index]
+  #project   = var.project_id
+  role = "roles/compute.admin"
+  service_account_id = google_service_account.vm_instance_sa.id
+}
+
+resource "google_service_account_iam_binding" "vm_ssh" {
+  members       = var.ssh_members
+  role          = "roles/iam.serviceAccountUser"
+  service_account_id = google_service_account.vm_instance_sa.id
+}
+
+
+resource "google_compute_instance" "default" {
+  name         = "tf-self-hosted-runner"
+  machine_type = var.instance_config.machine_type
+  zone         = "europe-west2-a"
+
+  tags = ["http-server","https-server"]
+
+  boot_disk {
+    initialize_params {
+      image = data.google_compute_image.ubuntu_image.self_link
+    }
+  }
+
+  // Local SSD disk
+  scratch_disk {
+    interface = "SCSI"
+  }
+
+  network_interface {
+    network = module.vpc.network_name
+
+    access_config {
+      // Ephemeral IP
+    }
+  }
+
+  metadata = {
+    foo = "bar"
+  }
+
+  metadata_startup_script = file("./files/install-hosted-runner.sh")
+
+  service_account {
+    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
+    email  = google_service_account.vm_instance_sa.email
+    scopes = ["cloud-platform"]
+  }
+}
+
+/*
 module "vm_compute_instance" {
   source  = "terraform-google-modules/vm/google//modules/compute_instance"
   version = "6.2.0"
@@ -45,15 +110,21 @@ module "vm_compute_instance" {
   # insert the 2 required variables here
 }
 
+data "google_compute_image" "ubuntu_image" {
+  family  = "ubuntu-1804-lts"
+  project = "ubuntu-os-cloud"
+}
+
 module "vm_instance_template" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"
   version = "6.2.0"
   machine_type = "n1-standard-1"
-  service_account = module.service_accounts.email
+  service_account = module.service_accounts.service_account.iam_email
   disk_size_gb = 20
-  source_image = "debian-cloud/debian-9"
+  #source_image = data.google_compute_image.ubuntu_image.self_link
   startup_script = file("./files/install-hosted-runner.sh")
   network        = module.vpc.network_name
+  tags        = ["http-server","https-server"]
   # insert the 3 required variables here
 }
 
@@ -63,10 +134,11 @@ module "service_accounts" {
   project_id    = var.project_id
   prefix        = "terraform-compute-sa"
   names         = ["first"]
+  display_name  = "Single Account"
   project_roles = [
-    "roles/compute.admin",
-    "roles/compute.networkAdmin",
-    "roles/compute.storageAdmin",
-    "roles/storage.admin"
+    "${var.project_id}=>roles/compute.admin",
+    "${var.project_id}=>roles/compute.networkAdmin",
+    "${var.project_id}=>roles/compute.storageAdmin",
+    "${var.project_id}=>roles/storage.admin"
   ]
-}
+}*/
