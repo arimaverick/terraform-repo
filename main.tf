@@ -61,7 +61,7 @@ resource "google_service_account_iam_binding" "vm_ssh" {
 }
 
 data "template_file" "nginx" {
-  template = file("${path.module}/files/install_nginx.tpl")
+  template = file("${path.module}/files/install-hosted-runner.sh")
 
   vars = {
     ufw_allow_nginx = "Nginx HTTP"
