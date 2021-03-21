@@ -46,12 +46,12 @@ resource "google_service_account" "vm_instance_sa" {
   display_name = "Service Account"
 }
 
-resource "google_service_account_iam_member" "compute_admin" {
+resource "google_project_iam_member" "compute_admin" {
   count       = length(var.ssh_members)
   member = var.ssh_members[count.index]
-  #project   = var.project_id
+  project   = var.project_id
   role = "roles/compute.admin"
-  service_account_id = google_service_account.vm_instance_sa.id
+  #service_account_id = google_service_account.vm_instance_sa.id
 }
 
 resource "google_service_account_iam_binding" "vm_ssh" {
@@ -80,7 +80,8 @@ resource "google_compute_instance" "default" {
   }
 
   network_interface {
-    network = module.vpc.network_name
+    #network = module.vpc.network_name
+    network   = "default"
 
     access_config {
       // Ephemeral IP
