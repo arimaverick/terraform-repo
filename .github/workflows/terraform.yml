@@ -21,6 +21,18 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
+      - name: Generate Runner Registration Token
+        run: |
+          echo "RUNNER_REG_TOKEN=$(curl -s -XPOST \
+          -H "authorization: token ${GITHUB_PAT}" \
+          https://api.github.com/repos/arimaverick/terraform-repo/actions/runners/registration-token |\
+          jq -r .token)"
+        env:
+          GITHUB_PAT: ${{ secrets.USER_PAT }}
+      
+      - name: Set Token for Registration
+        run: sed -i 's/RUNNER_REG_TOKEN/${RUNNER_REG_TOKEN}/' files/install_hosted_runner.tpl
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
