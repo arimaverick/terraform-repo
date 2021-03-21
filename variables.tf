@@ -23,7 +23,7 @@ variable "instance_config" {
     type        = string
   })
   default = {
-    machine_type = "e2-medium"
+    machine_type = "n1-standard-1"
     image_name   = "ubuntu-1804-bionic-v20210315a"
     image_project = "ubuntu-os-cloud"
     boot_disk_size = 20
