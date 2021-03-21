@@ -60,6 +60,13 @@ resource "google_service_account_iam_binding" "vm_ssh" {
   service_account_id = google_service_account.vm_instance_sa.id
 }
 
+data "template_file" "nginx" {
+  template = file("${path.module}/files/install_nginx.tpl")
+
+  vars = {
+    ufw_allow_nginx = "Nginx HTTP"
+  }
+}
 
 resource "google_compute_instance" "default" {
   name         = "tf-self-hosted-runner"
@@ -87,7 +94,8 @@ resource "google_compute_instance" "default" {
     foo = "bar"
   }
 
-  metadata_startup_script = file("./files/install-hosted-runner.sh")
+  #metadata_startup_script = file("./files/install-hosted-runner.sh")
+  metadata_startup_script = data.template_file.nginx.rendered
 
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
