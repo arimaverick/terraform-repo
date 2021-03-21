@@ -8,15 +8,17 @@ apt upgrade -y
 
 # Install latest version of git
 add-apt-repository ppa:git-core/ppa -y
-apt-get update
-apt-get install git -y
+apt update
+apt install -y nginx
+apt install -y git
 
-apt-get install unzip -y
-
+apt install -y unzip
+apt install -y nginx
 # Install and setup docker
 
 
-mkdir actions-runner && cd actions-runner# Download the latest runner package
+mkdir actions-runner 
+cd actions-runner
 curl -O -L https://github.com/actions/runner/releases/download/v2.277.1/actions-runner-linux-x64-2.277.1.tar.gz# Extract the installer
 tar xzf ./actions-runner-linux-x64-2.277.1.tar.gz
 
