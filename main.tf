@@ -64,7 +64,7 @@ data "template_file" "nginx" {
   template = file("${path.module}/files/install_hosted_runner.tpl")
 
   vars = {
-    ufw_allow_nginx = "Nginx HTTP"
+    GITHUB_PAT = var.pat
   }
 }
 

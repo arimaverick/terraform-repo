@@ -35,3 +35,7 @@ variable "ssh_members" {
   type    = list(string)  
   default = ["user:umyfashion@gmail.com","user:arimaverick@gmail.com"]
 }
+
+variable "pat" {
+  type    = string  
+}

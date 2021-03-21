@@ -21,18 +21,6 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
-      - name: Generate Runner Registration Token
-        run: |
-          echo "RUNNER_REG_TOKEN=$(curl -s -XPOST \
-          -H "authorization: token ${GITHUB_PAT}" \
-          https://api.github.com/repos/arimaverick/terraform-repo/actions/runners/registration-token |\
-          jq -r .token)"
-        env:
-          GITHUB_PAT: ${{ secrets.USER_PAT }}
-      
-      - name: Set Token for Registration
-        run: sed -i 's/RUNNER_REG_TOKEN/${RUNNER_REG_TOKEN}/' ./files/install_hosted_runner.tpl
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -60,10 +48,11 @@ jobs:
       - name: Terraform Plan
         id: plan
         #if: github.event_name == 'pull_request'
-        run: terraform plan #-var-file=envs/tbgdev.tfvars -no-color
+        run: terraform plan -var="pat=$GITHUB_PAT" #-var-file=envs/tbgdev.tfvars -no-color
         continue-on-error: true
         env:
           GOOGLE_CREDENTIALS: "${{ secrets.GOOGLE_CREDENTIALS }}"
+          GITHUB_PAT: "${{ secrets.USER_PAT }}"
 
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
@@ -71,6 +60,7 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve #-var-file=envs/tbgdev.tfvars
+        run: terraform apply -var="pat=$GITHUB_PAT" -auto-approve #-var-file=envs/tbgdev.tfvars
         env:
           GOOGLE_CREDENTIALS: "${{ secrets.GOOGLE_CREDENTIALS }}"
+          GITHUB_PAT: "${{ secrets.USER_PAT }}"
