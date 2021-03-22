@@ -17,7 +17,7 @@ sudo apt install -y jq
 #systemctl restart nginx
 #echo "Welcome to Google Compute VM Instance deployed using Terraform!!!" > /var/www/html/index.html
 sudo useradd -m github
-sudo su github
+sudo su - github
 mkdir actions-runner && cd actions-runner
 
 curl -O -L https://github.com/actions/runner/releases/download/v2.277.1/actions-runner-linux-x64-2.277.1.tar.gz
