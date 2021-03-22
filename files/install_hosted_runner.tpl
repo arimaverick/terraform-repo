@@ -18,17 +18,12 @@ echo "Welcome to Google Compute VM Instance deployed using Terraform!!!" > /var/
 useradd -m github
 mkdir /home/github/actions-runner
  
-echo 'echo RUNNER_REG_TOKEN=$(curl -s -XPOST \
-          -H "authorization: token '${GITHUB_PAT}'" \
-          https://api.github.com/repos/arimaverick/terraform-repo/actions/runners/registration-token |\
-          jq -r .token)' > /home/github/actions-runner/token
-
 chown -R github:github /home/github/actions-runner
 
-su - github sh -c "RUNNER_REG_TOKEN=`cat actions-runner/token`;cd actions-runner ; curl -O -L https://github.com/actions/runner/releases/download/v2.277.1/actions-runner-linux-x64-2.277.1.tar.gz; tar xzf ./actions-runner-linux-x64-2.277.1.tar.gz; ./config.sh --url https://github.com/arimaverick/terraform-repo --token `$(curl -s -XPOST \
-          -H "authorization: token '${GITHUB_PAT}'" \
+su - github sh -c "cd actions-runner ; curl -O -L https://github.com/actions/runner/releases/download/v2.277.1/actions-runner-linux-x64-2.277.1.tar.gz; tar xzf ./actions-runner-linux-x64-2.277.1.tar.gz; ./config.sh --url https://github.com/arimaverick/terraform-repo --token $(curl -s -XPOST \
+          -H "\"authorization: token '${GITHUB_PAT}'\"" \
           https://api.github.com/repos/arimaverick/terraform-repo/actions/runners/registration-token |\
-          jq -r .token)` --name ubuntu-shr --work '_work' --labels 'self-hosted','Linux','X64';./run.sh & > /tmp/github-actions.log"
+          jq -r .token) --name terraform-ubuntu-shr --work '_work' --labels 'self-hosted','Linux','X64';./run.sh & > /tmp/github-actions.log"
 
 echo "*****    Completed SHR Installation   *****"
 # Create the runner and start the configuration experience
