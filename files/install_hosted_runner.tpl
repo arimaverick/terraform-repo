@@ -16,7 +16,7 @@ sudo apt install -y jq
 #systemctl enable nginx
 #systemctl restart nginx
 #echo "Welcome to Google Compute VM Instance deployed using Terraform!!!" > /var/www/html/index.html
-sudo useradd -m github
+sudo su -c "useradd -m github -s /bin/bash"
 sudo su - github
 mkdir actions-runner && cd actions-runner
 
