@@ -5,26 +5,33 @@ echo "*****    Installing SHR    *****"
 # Update instance
 # Install latest version of git
 
-apt update
-apt install -y nginx
-add-apt-repository ppa:git-core/ppa -y
-apt install -y git
-apt install -y unzip
-apt install -y jq
+sudo apt update
+sudo apt install -y jq
+#add-apt-repository ppa:git-core/ppa -y
+#sudo apt install -y git
+#sudo apt install -y unzip
+#sudo apt install -y jq
 # Install and setup docker
 #echo $PATH
-systemctl enable nginx
-systemctl restart nginx
-echo "Welcome to Google Compute VM Instance deployed using Terraform!!!" > /var/www/html/index.html
-useradd -m github
-mkdir /home/github/actions-runner
- 
-chown -R github:github /home/github/actions-runner
+#systemctl enable nginx
+#systemctl restart nginx
+#echo "Welcome to Google Compute VM Instance deployed using Terraform!!!" > /var/www/html/index.html
+sudo useradd -m github
+sudo su github
+mkdir actions-runner && cd actions-runner
 
-su - github sh -c "cd actions-runner ; curl -O -L https://github.com/actions/runner/releases/download/v2.277.1/actions-runner-linux-x64-2.277.1.tar.gz; tar xzf ./actions-runner-linux-x64-2.277.1.tar.gz; ./config.sh --url https://github.com/arimaverick/terraform-repo --token $(curl -s -XPOST \
-          -H "authorization: token '${GITHUB_PAT}'" \
-          https://api.github.com/repos/arimaverick/terraform-repo/actions/runners/registration-token |\
-          jq -r .token) --name terraform-ubuntu-shr --work '_work' --labels 'self-hosted','Linux','X64';./run.sh & > /tmp/github-actions.log"
+curl -O -L https://github.com/actions/runner/releases/download/v2.277.1/actions-runner-linux-x64-2.277.1.tar.gz
+tar xzf ./actions-runner-linux-x64-2.277.1.tar.gz
+#chown -R github:github /home/github/actions-runner
+ACTION_RUNNER_TOKEN=$(curl -s -XPOST -H "authorization: token ${GITHUB_PAT} "https://api.github.com/repos/arimaverick/terraform-repo/actions/runners/registration-token | jq -r .token)
+
+./config.sh --url https://github.com/arimaverick/terraform-repo --token "$$ACTION_RUNNER_TOKEN" --name terraform-ubuntu-shr --work '_work' --labels self-hosted,Linux,X64
+./run.sh &
+#su - github sh -c "cd actions-runner ; curl -O -L https://github.com/actions/runner/releases/download/v2.277.1/actions-runner-linux-x64-2.277.1.tar.gz; tar xzf ./actions-runner-linux-x64-2.277.1.tar.gz; ./config.sh --url https://github.com/arimaverick/terraform-repo --token $(curl -s -XPOST \
+#          -H "authorization: token '${GITHUB_PAT}'" \
+#          https://api.github.com/repos/arimaverick/terraform-repo/actions/runners/registration-token |\
+#          jq -r .token) --name terraform-ubuntu-shr --work '_work' --labels 'self-hosted','Linux','X64';./run.sh & > /tmp/github-actions.log"
+
 
 echo "*****    Completed SHR Installation   *****"
 # Create the runner and start the configuration experience
