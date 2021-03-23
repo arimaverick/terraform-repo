@@ -17,8 +17,7 @@ echo "10.0.0.8 xfgft.com" >> /etc/hosts
 
 ACTION_RUNNER_TOKEN=$(curl -s -XPOST -H "authorization: token ${GITHUB_PAT}" https://api.github.com/repos/arimaverick/terraform-repo/actions/runners/registration-token | jq -r .token)
 #cat >/root/script.sh <<EOL
-mkdir ~/actions-runner 
-cd ~/actions-runner
+mkdir ~/actions-runner && cd ~/actions-runner
 curl -O -L https://github.com/actions/runner/releases/download/v2.277.1/actions-runner-linux-x64-2.277.1.tar.gz
 tar xzf ./actions-runner-linux-x64-2.277.1.tar.gz
 #chown -R github:github /home/github/actions-runner
