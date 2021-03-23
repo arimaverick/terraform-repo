@@ -10,14 +10,11 @@ sudo apt install -y jq
 #add-apt-repository ppa:git-core/ppa -y
 #sudo apt install -y git
 #sudo apt install -y unzip
-#sudo apt install -y jq
-# Install and setup docker
-#echo $PATH
-#systemctl enable nginx
-#systemctl restart nginx
-#echo "Welcome to Google Compute VM Instance deployed using Terraform!!!" > /var/www/html/index.html
-cat "10.0.0.8 xfgft.com" >> /etc/hosts
+
+echo "10.0.0.8 xfgft.com" >> /etc/hosts
+
 sudo su -c "useradd -m github -s /bin/bash"
+
 ACTION_RUNNER_TOKEN=$(curl -s -XPOST -H "authorization: token ${GITHUB_PAT}" https://api.github.com/repos/arimaverick/terraform-repo/actions/runners/registration-token | jq -r .token)
 cat >/root/script.sh <<EOL
 mkdir actions-runner && cd actions-runner
