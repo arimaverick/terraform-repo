@@ -12,7 +12,7 @@ env:
 jobs:
   terraform:
     name: "Terraform"
-    runs-on: ["self-hosted"]
+    runs-on: "ubuntu-18.04"
     steps:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@master
