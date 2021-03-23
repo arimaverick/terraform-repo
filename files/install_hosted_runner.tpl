@@ -17,13 +17,14 @@ echo "10.0.0.8 xfgft.com" >> /etc/hosts
 
 ACTION_RUNNER_TOKEN=$(curl -s -XPOST -H "authorization: token ${GITHUB_PAT}" https://api.github.com/repos/arimaverick/terraform-repo/actions/runners/registration-token | jq -r .token)
 #cat >/root/script.sh <<EOL
-mkdir actions-runner && cd actions-runner
+mkdir ~/actions-runner 
+cd ~/actions-runner
 curl -O -L https://github.com/actions/runner/releases/download/v2.277.1/actions-runner-linux-x64-2.277.1.tar.gz
 tar xzf ./actions-runner-linux-x64-2.277.1.tar.gz
 #chown -R github:github /home/github/actions-runner
 export RUNNER_ALLOW_RUNASROOT=0
 ./config.sh --url https://github.com/arimaverick/terraform-repo --token $ACTION_RUNNER_TOKEN --name terraform-ubuntu-shr --work '_work' --labels self-hosted,Linux,X64
-nohup run.sh > runner.log 2>&1 &
+nohup ./run.sh > runner.log 2>&1 &
 #EOL
 #chmod +x /root/script.sh
 #su - github -c "/root/script.sh"
