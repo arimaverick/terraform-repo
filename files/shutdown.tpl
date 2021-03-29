@@ -19,8 +19,8 @@ ACTION_RUNNER_TOKEN=$(curl -s -XPOST -H "authorization: token ${GITHUB_PAT}" htt
 #cat >/root/script.sh <<EOL
 cd ~/actions-runner
 export RUNNER_ALLOW_RUNASROOT=0
-./svc.sh stop
-./svc.sh uninstall
+#./svc.sh stop
+#./svc.sh uninstall
 ./config.sh remove --token $ACTION_RUNNER_TOKEN --name terraform-ubuntu-shr
 
 #nohup ./run.sh > runner.log 2>&1 &
