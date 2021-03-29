@@ -60,8 +60,16 @@ resource "google_service_account_iam_binding" "vm_ssh" {
   service_account_id = google_service_account.vm_instance_sa.id
 }
 
-data "template_file" "nginx" {
-  template = file("${path.module}/files/install_hosted_runner.tpl")
+data "template_file" "startup" {
+  template = file("${path.module}/files/startup.tpl")
+
+  vars = {
+    GITHUB_PAT = var.pat
+  }
+}
+
+data "template_file" "shutdown" {
+  template = file("${path.module}/files/shutdown.tpl")
 
   vars = {
     GITHUB_PAT = var.pat
@@ -91,11 +99,11 @@ resource "google_compute_instance" "default" {
   }
 
   metadata = {
-    foo = "bar"
+    shutdown-script = data.template_file.shutdown.rendered
   }
 
   #metadata_startup_script = file("./files/install-hosted-runner.sh")
-  metadata_startup_script = data.template_file.nginx.rendered
+  metadata_startup_script = data.template_file.startup.rendered
 
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
