@@ -99,7 +99,7 @@ resource "google_compute_instance" "default" {
   }
 
   metadata = {
-    shutdown-script = data.template_file.shutdown.rendered
+  #  shutdown-script = data.template_file.shutdown.rendered
   }
 
   #metadata_startup_script = file("./files/install-hosted-runner.sh")
