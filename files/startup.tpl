@@ -25,7 +25,7 @@ export RUNNER_ALLOW_RUNASROOT=0
 cp bin/runsvc.sh .
 chmod +x runsvc.sh
 ./config.sh --url https://github.com/arimaverick/terraform-repo --token $ACTION_RUNNER_TOKEN --name terraform-ubuntu-shr --work '_work' --labels self-hosted,Linux,X64
-./runsvc.sh
+./run.sh &
 #./svc.sh install
 #./svc.sh start
 #nohup ./run.sh > runner.log 2>&1 &
