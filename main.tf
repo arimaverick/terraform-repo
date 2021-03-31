@@ -85,7 +85,7 @@ resource "google_compute_instance" "default" {
 
   boot_disk {
     initialize_params {
-      image = data.google_compute_image.ubuntu_image.self_link
+      image = data.google_compute_image.image.self_link
     }
   }
 
@@ -122,7 +122,7 @@ module "vm_compute_instance" {
   # insert the 2 required variables here
 }
 
-data "google_compute_image" "ubuntu_image" {
+data "google_compute_image" "image" {
   family  = "ubuntu-1804-lts"
   project = "ubuntu-os-cloud"
 }
@@ -133,7 +133,7 @@ module "vm_instance_template" {
   machine_type = "n1-standard-1"
   service_account = module.service_accounts.service_account.iam_email
   disk_size_gb = 20
-  #source_image = data.google_compute_image.ubuntu_image.self_link
+  #source_image = data.google_compute_image.image.self_link
   startup_script = file("./files/install-hosted-runner.sh")
   network        = module.vpc.network_name
   tags        = ["http-server","https-server"]
