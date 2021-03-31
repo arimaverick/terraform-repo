@@ -36,7 +36,7 @@ module "vpc" {
   ]
 }
 
-data "google_compute_image" "ubuntu_image" {
+data "google_compute_image" "image" {
   name  = var.instance_config.image_name
   project = var.instance_config.image_project
 }

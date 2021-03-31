@@ -24,8 +24,8 @@ variable "instance_config" {
   })
   default = {
     machine_type = "n1-standard-1"
-    image_name   = "ubuntu-1804-bionic-v20210315a"
-    image_project = "ubuntu-os-cloud"
+    image_name   = "rhel-7-v20210316"
+    image_project = "rhel-cloud"
     boot_disk_size = 20
     type        = "prod-ssd"
   }
