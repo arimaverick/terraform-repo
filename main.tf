@@ -61,10 +61,10 @@ resource "google_service_account_iam_binding" "vm_ssh" {
 }
 
 data "template_file" "startup" {
-  template = file("${path.module}/files/startup.tpl")
+  template = file("${path.module}/files/startup.sh")
 
   vars = {
-    GITHUB_PAT = var.pat
+    #GITHUB_PAT = var.pat
   }
 }
 
