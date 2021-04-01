@@ -23,7 +23,7 @@ variable "instance_config" {
     type        = string
   })
   default = {
-    machine_type = "n1-standard-1"
+    machine_type = "n1-standard-2"
     image_name   = "rhel-7-v20210316"
     image_project = "rhel-cloud"
     boot_disk_size = 20
