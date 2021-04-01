@@ -37,5 +37,6 @@ variable "ssh_members" {
 }
 
 variable "pat" {
-  type    = string  
+  type    = string
+  sensitive = true
 }

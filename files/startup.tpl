@@ -4,6 +4,7 @@ echo "*****    Installing SHR    *****"
 # Create a folder
 # Update instance
 # Install latest version of git
+sudo yum install --disablerepo=google-cloud-sdk -y cloud-init
 sudo yum update -y
 sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
