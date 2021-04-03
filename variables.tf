@@ -24,16 +24,21 @@ variable "instance_config" {
   })
   default = {
     machine_type = "n1-standard-2"
-    image_name   = "rhel-7-v20210316"
+    image_name   = "rhel-7-v20210401"
     image_project = "rhel-cloud"
     boot_disk_size = 20
-    type        = "prod-ssd"
+    type        = "pd-ssd"
   }
 }
 
 variable "ssh_members" {
   type    = list(string)  
   default = ["user:umyfashion@gmail.com","user:arimaverick@gmail.com"]
+}
+
+variable "region" {
+  type = string
+  default = "europe-west2"
 }
 
 variable "pat" {
