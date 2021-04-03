@@ -116,7 +116,7 @@ data "template_file" "startup" {
   template = file("${path.module}/files/startup.tpl")
 
   vars = {
-    #GITHUB_PAT = var.pat
+    GITHUB_PAT = var.pat
   }
 }
 
