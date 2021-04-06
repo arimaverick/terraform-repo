@@ -42,7 +42,7 @@ resource "google_service_networking_connection" "private_vpc_connection" {
   reserved_peering_ranges = [google_compute_global_address.private_ip_address[count.index].name]
 }
 
-
+/*
 resource "google_compute_subnetwork" "private_network_cloudsql" {
   count = local.vpc_count  
   name = join("-",[local.private_subnetwork_cloudsql,random_string.network_suffixes[count.index].result])
@@ -50,7 +50,7 @@ resource "google_compute_subnetwork" "private_network_cloudsql" {
   network = google_compute_network.poc_network_cloudsql[count.index].self_link
   region = var.region
 }
-
+*/
 resource "google_compute_firewall" "poc-firewall-rule-cloudsql" {
   count = local.vpc_count
   name =  join("-",[local.firewall-rule,random_string.network_suffixes[count.index].result])

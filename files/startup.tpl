@@ -16,11 +16,26 @@ sudo systemctl start docker
 
 #sudo su -c "useradd -m github -s /bin/bash"
 mkdir /docker-setup
+echo "Creating Shutdown script"
+
+cat > /docker-setup/shutdown-script.sh <<- "EOF"
+#!/bin/bash
+
+for i in {1..5}
+do 
+  CONTAINERID=`sudo docker ps -aqf "name=github-runner-$i"`
+  echo "Remove Operation from container: $CONTAINERID"
+  sudo docker exec $CONTAINERID /bin/bash -c "sh /home/actions/actions-runner/remove-runner.sh"
+done
+EOF
+
+chmod +x /docker-setup/shutdown-script.sh
+
 echo "Creating Remove Runner script"
 cat > /docker-setup/remove-runner.sh <<- "EOF"
 #!/bin/bash
 
-cd /home/actions/action-runner
+cd /home/actions/actions-runner
 export RUNNER_ALLOW_RUNASROOT=0
 ACTION_REMOVE_RUNNER_TOKEN=$(curl -s -XPOST -H "authorization: token ${GITHUB_PAT}" https://api.github.com/repos/arimaverick/terraform-repo/actions/runners/registration-token | jq -r .token)
 ./config.sh remove --token $ACTION_REMOVE_RUNNER_TOKEN

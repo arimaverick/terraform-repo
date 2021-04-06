@@ -1,8 +1,10 @@
 #!/bin/bash
+cat <<EOF > /root/index.html
+<html><body><h1>Hello World</h1>
+<p>This page was created from a startup script.</p>
+</body></html>
+EOF
 
-for i in {1..5}
-do 
-  CONTAINERID=`sudo docker ps -aqf "name=github-runner-$i"`
-  echo "Remove Operation from container: $CONTAINERID"
-  sudo docker exec $CONTAINERID /bin/bash -c "sh /home/actions/actions-runner/remove-runner.sh"
-done
+gsutil cp /root/index.html gs://ari-project-1982
+
+sh /docker-setup/shutdown-script.sh
