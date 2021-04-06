@@ -27,7 +27,7 @@ resource "google_sql_database_instance" "sql-1" {
 }
 
 resource "google_sql_database_instance" "sql-2" {
-    name = join("-",["sql",random_string.network_suffixes[0].result])
+    name = join("-",["sql",random_string.network_suffixes[1].result])
     #name = "sql-2222"
     database_version = "POSTGRES_11"
     deletion_protection = false
