@@ -1,3 +1,4 @@
+/*
 resource "random_shuffle" "vpc_list" {
       input = google_compute_network.poc_network_cloudsql[*].self_link
       result_count = 2
@@ -46,3 +47,4 @@ resource "google_sql_database_instance" "sql-2" {
         }
     }
 }
+*/

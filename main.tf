@@ -1,4 +1,4 @@
-locals {
+/*locals {
   default_network_name = "private-cloudsql"
   vpc_count = 2
   private_network_name = local.default_network_name
@@ -50,7 +50,7 @@ resource "google_compute_subnetwork" "private_network_cloudsql" {
   network = google_compute_network.poc_network_cloudsql[count.index].self_link
   region = var.region
 }
-*/
+
 resource "google_compute_firewall" "poc-firewall-rule-cloudsql" {
   count = local.vpc_count
   name =  join("-",[local.firewall-rule,random_string.network_suffixes[count.index].result])
@@ -91,6 +91,17 @@ resource "google_compute_router_nat" "default-cloud-nat-gw" {
 data "google_compute_image" "image" {
   name  = var.instance_config.image_name
   project = var.instance_config.image_project
+}
+*/
+
+resource "google_service_usage_consumer_quota_override" "override" {
+  provider       = google-beta
+  project        = var.project_id
+  service        = "compute.googleapis.com"
+  metric         = "compute.googleapis.com/networks"
+  limit          = "/project/region"
+  override_value = "10"
+  force          = true
 }
 
 resource "google_service_account" "vm_instance_sa" {
@@ -163,6 +174,8 @@ resource "google_compute_instance" "default" {
     scopes = ["cloud-platform"]
   }
 }
+
+
 
 /*
 module "vm_compute_instance" {
