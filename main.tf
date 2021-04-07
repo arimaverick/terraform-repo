@@ -86,13 +86,12 @@ resource "google_compute_router_nat" "default-cloud-nat-gw" {
     filter = "ERRORS_ONLY"
   }
 }
-
+*/
 
 data "google_compute_image" "image" {
   name  = var.instance_config.image_name
   project = var.instance_config.image_project
 }
-*/
 
 resource "google_service_usage_consumer_quota_override" "override" {
   provider       = google-beta
