@@ -98,7 +98,7 @@ resource "google_service_usage_consumer_quota_override" "override" {
   project        = var.project_id
   service        = "compute.googleapis.com"
   metric         = "compute.googleapis.com%2Fnetworks"
-  limit          = "%2Fproject%2Fregion"
+  limit          = "%2Fproject"
   override_value = "10"
   force          = true
 }
