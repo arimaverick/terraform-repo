@@ -1,0 +1,22 @@
+# openapi2-functions.yaml
+swagger: '2.0'
+info:
+  title: API_ID optional-string
+  description: Sample API on API Gateway with a Google Cloud Functions backend
+  version: 1.0.0
+schemes:
+  - https
+produces:
+  - application/json
+paths:
+  /docker:
+    get:
+      summary: Run a Container
+      operationId: create_build
+      x-google-backend:
+        address: https://europe-west2-ari-project-1982.cloudfunctions.net/test-runner-run
+      responses:
+        '200':
+          description: A successful response
+          schema:
+            type: string

@@ -16,32 +16,27 @@ variable "subnet2_name" {
 
 variable "instance_config" {
   type = object({
-    machine_type = string
-    image_name   = string
-    image_project = string
+    machine_type   = string
+    image_name     = string
+    image_project  = string
     boot_disk_size = number
-    type        = string
+    type           = string
   })
   default = {
-    machine_type = "n1-standard-2"
-    image_name   = "rhel-7-v20210401"
-    image_project = "rhel-cloud"
+    machine_type   = "n1-standard-2"
+    image_name     = "rhel-7-v20210401"
+    image_project  = "rhel-cloud"
     boot_disk_size = 20
-    type        = "pd-ssd"
+    type           = "pd-ssd"
   }
 }
 
 variable "ssh_members" {
-  type    = list(string)  
-  default = ["user:umyfashion@gmail.com","user:arimaverick@gmail.com"]
+  type    = list(string)
+  default = ["user:umyfashion@gmail.com", "user:arimaverick@gmail.com"]
 }
 
 variable "region" {
-  type = string
-  default = "europe-west2"
-}
-
-variable "pat" {
   type    = string
-  sensitive = true
+  default = "europe-west2"
 }

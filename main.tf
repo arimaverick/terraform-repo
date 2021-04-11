@@ -89,18 +89,8 @@ resource "google_compute_router_nat" "default-cloud-nat-gw" {
 */
 
 data "google_compute_image" "image" {
-  name  = var.instance_config.image_name
+  name    = var.instance_config.image_name
   project = var.instance_config.image_project
-}
-
-resource "google_service_usage_consumer_quota_override" "override" {
-  provider       = google-beta
-  project        = var.project_id
-  service        = "compute.googleapis.com"
-  metric         = "compute.googleapis.com%2Fnetworks"
-  limit          = "%2Fproject"
-  override_value = "10"
-  force          = true
 }
 
 resource "google_service_account" "vm_instance_sa" {
@@ -109,16 +99,23 @@ resource "google_service_account" "vm_instance_sa" {
 }
 
 resource "google_project_iam_member" "compute_admin" {
-  count       = length(var.ssh_members)
-  member = var.ssh_members[count.index]
-  project   = var.project_id
-  role = "roles/compute.admin"
+  count   = length(var.ssh_members)
+  member  = var.ssh_members[count.index]
+  project = var.project_id
+  role    = "roles/compute.admin"
   #service_account_id = google_service_account.vm_instance_sa.id
 }
 
+resource "google_secret_manager_secret_iam_binding" "binding" {
+  project   = var.project_id
+  secret_id = "projects/507262241509/secrets/github_pat"
+  role      = "roles/secretmanager.secretAccessor"
+  members   = ["serviceAccount:${google_service_account.vm_instance_sa.email}"]
+}
+
 resource "google_service_account_iam_binding" "vm_ssh" {
-  members       = var.ssh_members
-  role          = "roles/iam.serviceAccountUser"
+  members            = var.ssh_members
+  role               = "roles/iam.serviceAccountUser"
   service_account_id = google_service_account.vm_instance_sa.id
 }
 
@@ -126,7 +123,7 @@ data "template_file" "startup" {
   template = file("${path.module}/files/startup.tpl")
 
   vars = {
-    GITHUB_PAT = var.pat
+    #GITHUB_PAT = var.pat
   }
 }
 
@@ -134,7 +131,7 @@ data "template_file" "shutdown" {
   template = file("${path.module}/files/shutdown.tpl")
 
   vars = {
-    GITHUB_PAT = var.pat
+    #GITHUB_PAT = var.pat
   }
 }
 
@@ -143,7 +140,7 @@ resource "google_compute_instance" "default" {
   machine_type = var.instance_config.machine_type
   zone         = "europe-west1-b"
 
-  tags = ["http-server","https-server"]
+  tags = ["http-server", "https-server"]
 
   boot_disk {
     initialize_params {
@@ -153,7 +150,7 @@ resource "google_compute_instance" "default" {
 
   network_interface {
     #network = module.vpc.network_name
-    network   = "default"
+    network = "default"
 
     access_config {
       // Ephemeral IP
@@ -161,7 +158,7 @@ resource "google_compute_instance" "default" {
   }
 
   metadata = {
-    shutdown-script = data.template_file.shutdown.rendered
+    #  shutdown-script = data.template_file.shutdown.rendered
   }
 
   #metadata_startup_script = file("./files/install-hosted-runner.sh")
