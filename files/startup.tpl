@@ -83,7 +83,7 @@ export ACTION_RUNNER_TOKEN=$(echo $payload | jq .token --raw-output)
     --token $ACTION_RUNNER_TOKEN \
     --url https://github.com/arimaverick/terraform-repo \
     --unattended \
-    --labels 'self-hosted,Linux,X64' \
+    --labels 'self-hosted,ubuntu,X64' \
     --replace
 
 remove() {
